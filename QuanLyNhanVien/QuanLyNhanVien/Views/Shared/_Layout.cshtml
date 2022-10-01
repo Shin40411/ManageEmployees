@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Website quản lý nhân viên</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+</head>
+<body>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        @*<footer>
+                <p>&copy; @DateTime.Now.Year - Website quản lý nhân viên</p>
+            </footer>*@
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+
+    <script>
+        $("#LoadingList").html("Loading.....");
+        $.get("/Staffs/GetStaffList", null, DataBind);
+        function DataBind(StaffsList) {
+            var SetData = $("#SetStaffList");
+            for (var i = 0; i < StaffsList.length; i++) {
+                var Data = "<tr class='row_" + StaffsList[i].ID_Staff + "'>" +
+                    "<td class='text-center counterCell'></td>" +
+                    "<td class='text-center'>" + StaffsList[i].FullName + "</td>" +
+                    "<td class='text-center'>" + StaffsList[i].Email + "</td>" +
+                    "<td>" + StaffsList[i].Address + "</td>" +
+                    "<td class='text-center'>" + StaffsList[i].Phone + "</td>" +
+                    "<td class='text-center'>" + "<a href='#' onclick='DeleteStaffRecord(" + StaffsList[i].ID_Staff + ")'> <i class='fa fa-trash'></i></a>" + "</td>" +
+                    "</tr>";
+                SetData.append(Data);
+                $("#LoadingList").html("");
+            }
+        }
+
+        function AddnewStaff(StaffId) {
+            $("#addform")[0].reset();
+            $("#ModalTitle").html("Thêm nhân viên");
+            $("#AddPopup").modal();
+
+            $("#SubmitAdd").click(function () {
+                var data = $("#SubmitForm").serialize();
+                var name = $("#StaName").val();
+                var email = $("#Email").val();
+                var address = $("#Address").val();
+                var phone = $("#Phone").val();
+                if (name == "" && email == "" && address == "" && phone == "") {
+                    alert("Bạn điền thiếu trường, mời nhập lại nhé!");
+                } else if (name == "" || email == "" || address == "" || phone == "") {
+                    alert("Bạn điền thiếu trường, mời nhập lại nhé");             
+                } else {
+                     $.ajax({
+                        type: "POST",
+                        url: "CreateStaffs",
+                        data: data,
+                        success: function (result) {
+                            alert("Thêm thành công!");
+                            window.location.href = "/Staffs/Index";
+                            $("#AddPopup").modal("hide");
+                        }
+                    })
+                }
+            })
+        }
+
+
+
+        function DeleteStaffRecord(StaffId) {
+            $("#StaId").val(StaffId);
+            $("#DeleteStaff").modal("show");
+            //alert(StaffId);
+        }
+        function ConfirmDel() {
+            var StaId = $("#StaId").val();
+            $.ajax({
+                type: "POST",
+                url: "/Staffs/DeleteStaffRecord?StaffId=" + StaId,
+                success: function (result) {
+                    $("#DeleteStaff").modal("hide");
+                    $(".row_" + StaId).remove();
+                }
+            })
+        }
+    </script>
+
+</body>
+</html>

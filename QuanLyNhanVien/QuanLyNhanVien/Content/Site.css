@@ -1,0 +1,70 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+/*input,
+select,
+textarea {
+    max-width: 280px;
+}
+*/
+
+.navbar.navbar-inverse.modal-title h2 {
+    padding: 2px 2px 8px 35px;
+    color: #fff;
+    font-weight: bold;
+    font-family: cursive;
+}
+
+.d-flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.d-flex p {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+
+.d-flex p a {
+    background-color: #b4d15b;
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+
+
+.d-flex p a:hover {
+    background-color: #ffd800;
+}
+
+td.text-center.om {
+    width: 10%;
+}
+
+table {
+    counter-reset: tableCount;
+}
+
+.counterCell:before {
+    content: counter(tableCount);
+    counter-increment: tableCount;
+}
